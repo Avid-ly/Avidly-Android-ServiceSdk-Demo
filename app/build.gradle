@@ -1,0 +1,67 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 29
+    defaultConfig {
+        applicationId "com.avidly.cs.app"
+        minSdkVersion 16
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        flavorDimensions "default"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    signingConfigs {
+        release {
+            storeFile file('debug.jks')
+            keyAlias 'debug_accountsdk'
+            keyPassword '123456'
+            storePassword '123456'
+        }
+
+        debug {
+            storeFile file('debug.jks')
+            keyAlias 'debug_accountsdk'
+            keyPassword '123456'
+            storePassword '123456'
+        }
+    }
+
+    productFlavors {
+        demo {
+            resValue "string", "facebook_app_id", "your_facebook_appid"
+            resValue "string", "fb_login_protocol_scheme", "your_facebook_scheme"
+            buildConfigField 'String', 'PRODUCT_ID', '"600180"'
+        }
+
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+//    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0-rc01'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.browser:browser:1.0.0'
+    implementation('com.facebook.android:facebook-login:[4,5)') {
+        // values.xml中增加facebook_app_id，fb_login_protocol_scheme
+        exclude group: 'com.android.support'//排除组织依赖
+        exclude module: 'appcompat-v7'//排除模块依赖
+    }
+    implementation (name:'AASDK_1.0.8_release', ext:'aar')
+    implementation (name:'analysissdk-foreign_R3.2.0.6', ext:'aar')
+    implementation (name:'CSSDK_1.0.0_release', ext:'aar')
+}
